@@ -84,7 +84,7 @@ spec:
                       username ${REDIS_CLUSTER_USERNAME} \
                       password ${REDIS_CLUSTER_PASSWORD} \
                       flash_enabled \
-                      flash_path /var/opt/redislabs/flash
+                      flash_path /var/opt/redislabs/flash \
                       replace_node ${NODE_ID}
                     exit
           ports:
