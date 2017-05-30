@@ -11,7 +11,7 @@ spec:
         app: redis-enterprise
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
+        dedicated: redis-enterprise-flash
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -20,8 +20,13 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - redispack
-              topologyKey: kubernetes.io/hostname #failure-domain.beta.kubernetes.io/zone
+                      - redis-enterprise
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+        - key: dedicated
+          operator: "Equal"
+          value: redis-enterprise-flash
+          effect: "NoSchedule"
       containers:
         - name: redis-enterprise
           image: redislabs/redis:4.5.0-22
@@ -63,7 +68,9 @@ spec:
                         name ${REDIS_CLUSTER_NAME} \
                         license_file /opt/redislabs/config/license.key \
                         username ${REDIS_CLUSTER_USERNAME} \
-                        password ${REDIS_CLUSTER_PASSWORD}
+                        password ${REDIS_CLUSTER_PASSWORD} \
+                        flash_enabled \
+                        flash_path /var/opt/redislabs/flash
                       touch /opt/redislabs/config/done
                       exit
                     fi
@@ -76,6 +83,8 @@ spec:
                       nodes ${MASTER_IP_ADDRESS} \
                       username ${REDIS_CLUSTER_USERNAME} \
                       password ${REDIS_CLUSTER_PASSWORD} \
+                      flash_enabled \
+                      flash_path /var/opt/redislabs/flash
                       replace_node ${NODE_ID}
                     exit
           ports:
