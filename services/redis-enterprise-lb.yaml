@@ -6,6 +6,10 @@ metadata:
     app: redis-enterprise-lb
 spec:
   ports:
+    - name: discovery
+      port: 8001
+      targetPort: 8001
+      protocol: TCP
     - name: ui
       port: 8443
       targetPort: 8443

@@ -61,6 +61,7 @@ spec:
                   - |
                     # Create a new cluster.
                     sleep 45
+                    chown redislabs:redislabs -R /var/opt/redislabs/flash
                     POD_INDEX=$(echo ${HOSTNAME} | cut -d '-' -f 3)
                     if [ "${POD_INDEX}" == "0" ] && [ ! -f /opt/redislabs/config/done ]
                     then
@@ -88,6 +89,8 @@ spec:
                       replace_node ${NODE_ID}
                     exit
           ports:
+            - name: discovery
+              containerPort: 8001
             - name: ui
               containerPort: 8443
             - name: redis
@@ -107,6 +110,8 @@ spec:
             - name: "config"
               mountPath: "/opt/redislabs/config/ccs-redis.conf"
               subPath: ccs-redis.conf
+            - name: "flash"
+              mountPath: "/var/opt/redislabs/flash"
       volumes:
         - name: config
           configMap:
@@ -114,3 +119,6 @@ spec:
         - name: secrets
           secret:
             secretName: redis-enterprise
+        - name: flash
+          hostPath:
+            path: "/mnt/disks/ssd0"
