@@ -104,3 +104,15 @@ Create the `redis-enterprise` statefulset:
 ```
 kubectl create -f statefulsets/redis-enterprise.yaml
 ```
+
+## The Redis Labs Dashboard
+
+Use the `kubectl port-forward` command to setup a secure tunnel to the Redis Labs dashboard:
+
+```
+kubectl port-forward redis-enterprise-0 8443:8443
+```
+
+Visit [https://127.0.0.1:8443](https://127.0.0.1:8443) in your browser.
+
+![Image of Redis Labs dashboard](images/redislabs-dashboard.png)
