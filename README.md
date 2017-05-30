@@ -26,6 +26,8 @@ gcloud beta container node-pools create redis-enterprise-pool \
   --node-labels dedicated=redis-enterprise
 ```
 
+> After adding the `redis-enterprise-pool` node pool the Kubernetes API will down for a few minutes while the cluster state is being reconciled. Check the cluster status using the `gcloud container clusters list` command.
+
 Each dedicated worker has an attached [local SSD](https://cloud.google.com/compute/docs/disks/local-ssd) and will include a [node label](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#step-one-attach-label-to-the-node) `dedicated=redis-enterprise`, which will be used attract Redis Enterprise pods. 
 
 ## Taint the Dedicated Worker Nodes
