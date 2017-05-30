@@ -26,21 +26,35 @@ gcloud beta container node-pools create redis-enterprise-pool \
   --node-labels dedicated=redis-enterprise
 ```
 
-Each dedicated worker has an attached [local SSD](https://cloud.google.com/compute/docs/disks/local-ssd) and will include the [node label](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#step-one-attach-label-to-the-node) `dedicated=redis-enterprise`. 
+Each dedicated worker has an attached [local SSD](https://cloud.google.com/compute/docs/disks/local-ssd) and will include a [node label](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#step-one-attach-label-to-the-node) `dedicated=redis-enterprise`, which will be used attract Redis Enterprise pods. 
 
-## Taint the Kubernetes Nodes
+## Taint the Dedicated Worker Nodes
 
-Ensure only the redis-enterprise instances run on the `redis-enterprise-pool` node pool.
+In this section you will [taint](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature) a subset of the worker nodes to ensure only the Redis Enterprise pods are scheduled on them.
+
+Extract the worker node names that have the `dedicated=redis-enterprise` node label set:
 
 ```
 DEDICATED_NODES=$(kubectl get nodes -l dedicated=redis-enterprise -o jsonpath={.items[*].metadata.name})
 ```
 
-[Taint](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature) the nodes to ensure only pods from the `redis-enterprise` statefulset are scheduled on them:
+Taint the dedicated worker nodes:
 
 ```
 kubectl taint nodes ${DEDICATED_NODES} dedicated=redis-enterprise:NoSchedule
 ```
+
+At this point only pods with the following toleration will be scheduled on the dedicated worker nodes:
+
+```
+tolerations:
+  - key: dedicated
+    operator: "Equal"
+    value: redis-enterprise
+    effect: "NoSchedule"
+```
+
+See the [redis-enterprise](statefulsets/redis-enterprise.yaml) StatefulSet for more details.
 
 ## Deploy Redis Enterprise
 
