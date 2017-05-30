@@ -1,6 +1,6 @@
 # Redis Enterprise on Kubernetes
 
-This tutorial will walk you through provisioning 3 node [Redis Enterprise](https://redislabs.com/redis-enterprise-documentation/overview) cluster with support for the [Redis Flash](https://redislabs.com/redis-enterprise-documentation/concepts-architecture/concepts/redis-e-flash) feature, which allows you to create databases that span both RAM and flash memory (SSD) for larger datasets.
+This tutorial will walk you through provisioning a three node [Redis Enterprise](https://redislabs.com/redis-enterprise-documentation/overview) cluster with support for the [Redis Flash](https://redislabs.com/redis-enterprise-documentation/concepts-architecture/concepts/redis-e-flash) feature, which allows you to create databases that span both RAM and flash memory (SSD) for larger datasets.
 
 ## Prerequisites
 
