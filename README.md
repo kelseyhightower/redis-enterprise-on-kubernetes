@@ -63,13 +63,17 @@ In this section you will deploy the `redislabs/redis:4.5.0-22` container image u
 Create a secret to hold the Redis Enterprise license key and authentication credentials:
 
 ```
-export REDIS_CLUSTER_PASSWORD="redislabs123"
+REDIS_CLUSTER_USERNAME="kelsey.hightower@gmail.com"
+```
+
+```
+REDIS_CLUSTER_PASSWORD="redislabs123"
 ```
 
 ```
 kubectl create secret generic redis-enterprise \
   --from-literal "password=${REDIS_CLUSTER_PASSWORD}" \
-  --from-literal "username=kelsey.hightower@gmail.com" \
+  --from-literal "username=${REDIS_CLUSTER_USERNAME}" \
   --from-file "license.key=${HOME}/license.key"
 ```
 
