@@ -14,6 +14,10 @@ spec:
       port: 8443
       targetPort: 8443
       protocol: TCP
+    - name: api
+      port: 9443
+      targetPort: 9443
+      protocol: TCP
     - name: redis
       port: 26379
       targetPort: 26379
