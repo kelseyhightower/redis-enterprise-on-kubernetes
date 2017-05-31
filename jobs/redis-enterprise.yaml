@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-test
+spec:
+  template:
+    metadata:
+      labels:
+        app: load-test
+    spec:
+      containers:
+        - name: redis-enterprise
+          image: redislabs/redis:4.5.0-22
+          command:
+            - "/opt/redislabs/bin/memtier_benchmark"
+          args:
+            - "--server=10.136.4.10"
+            - "--port=12000"
+            - "--hide-histogram"
+            - "--pipeline=10"
+            - "--clients=12"
+            - "--threads=24"
+            - "--key-maximum=3636363"
+            - "--requests=allkeys"
+            - "--data-size=1000"
+            - "--key-pattern=P:P"
+            - "--ratio=1:0"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+      restartPolicy: Never
